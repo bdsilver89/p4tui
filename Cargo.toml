@@ -1,0 +1,29 @@
+[package]
+name = "p4tui"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0"
+asyncp4 = { path = "./asyncp4", version = "0.1", default-features = false }
+clap = { version = "4.3.19", features = ["env", "cargo"] }
+crossbeam-channel = "0.5"
+crossterm = { version = "0.26.1", features = ["serde"] }
+dirs-next = "2.0.0"
+easy-cast = "0.5.2"
+log = "0.4"
+ratatui = { version = "0.22.0", default-features = false, features = [
+  "crossterm",
+  "serde",
+] }
+ron = "0.8.0"
+serde = "1.0"
+struct-patch = "0.3.0"
+unicode-truncate = "0.2.0"
+unicode-width = "0.1.10"
+
+[dev-dependencies]
+pretty_assertions = "1.4"
+tempfile = "3.6"
