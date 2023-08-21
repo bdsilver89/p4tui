@@ -1,5 +1,6 @@
-/target
-/release
-.DS_Store
-/.idea/
-/.vscode/
+debug/
+target/
+asyncp4/target/
+Cargo.lock
+**/*.rs.bk
+*.pdb

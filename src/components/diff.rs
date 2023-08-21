@@ -53,8 +53,9 @@ impl DrawableComponent for DiffComponent {
         // self.horizontal_scroll.update()
 
         let diff = Block::default()
-            .title(Span::raw("Diff"))
-            .borders(Borders::ALL);
+            .title(Span::styled("Diff", self.theme.title(self.focused)))
+            .borders(Borders::ALL)
+            .border_style(self.theme.block(self.focused));
 
         f.render_widget(diff, r);
         Ok(())

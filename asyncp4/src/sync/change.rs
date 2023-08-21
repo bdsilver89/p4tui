@@ -1,4 +1,8 @@
-use std::process::Command;
+use std::{process::Command, str};
+
+use crate::{Error, Result};
+
+use regex::Regex;
 
 pub enum ChangelistStatus {
     None,
@@ -8,7 +12,7 @@ pub enum ChangelistStatus {
 
 pub struct Changelist {
     changelist: u32,
-    files: Vec<File>,
+    // files: Vec<File>,
     status: ChangelistStatus,
 }
 
@@ -16,15 +20,15 @@ impl Changelist {
     pub fn new() -> Self {
         Self {
             changelist: 0,
-            files: Vec::new(),
+            // files: Vec::new(),
             status: ChangelistStatus::None,
         }
     }
 
-    pub fn file<'a>(&'a mut self, f: File) -> &'a mut Changelist {
-        self.files.push(f);
-        self
-    }
+    // pub fn file<'a>(&'a mut self, f: File) -> &'a mut Changelist {
+    //     self.files.push(f);
+    //     self
+    // }
 }
 
 pub fn get_pending_changelists(user: Option<String>, client: Option<String>) -> Result<Vec<u32>> {
@@ -40,7 +44,7 @@ fn get_changelists_impl(
     client: Option<String>,
     status: ChangelistStatus,
 ) -> Result<Vec<u32>> {
-    let cmd = Command::new("p4");
+    let mut cmd = Command::new("p4");
     cmd.arg("changes");
     if let Some(u) = user {
         cmd.arg("-u");
@@ -62,13 +66,16 @@ fn get_changelists_impl(
         _ => {}
     }
 
-    let output = cmd.output().context("failed to execute p4 command")?;
+    let output = cmd.output().map_err(|e| Error::from(e))?;
 
     let mut result = Vec::new();
-    for line in str::from_utf8(output.stdout.as_slice())?
+    for line in str::from_utf8(output.stdout.as_slice())
+        .unwrap()
+        // FIXME: replace unwrap with map err
         .split('\n')
         .filter(|l| !l.is_empty())
     {
+        // FIXME: replace unwrap with map err
         let re = Regex::new(r"Change ([0-9]+)").unwrap();
         if let Some(caps) = re.captures(line) {
             let cl = String::from(&caps[1]).parse::<u32>().unwrap();
@@ -76,5 +83,5 @@ fn get_changelists_impl(
         }
     }
 
-    result
+    Ok(result)
 }

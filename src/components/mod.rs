@@ -1,5 +1,7 @@
+mod changelist;
 mod command;
 mod diff;
+mod filelist;
 mod help;
 mod utils;
 

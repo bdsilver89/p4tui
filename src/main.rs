@@ -14,7 +14,6 @@ mod version;
 use std::{
     io::{self, Stdout},
     path::PathBuf,
-    time::Duration,
 };
 
 use anyhow::{bail, Context, Result};
@@ -24,7 +23,6 @@ use crossbeam_channel::{Receiver, Select};
 use crossterm::{
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
-    QueueableCommand,
 };
 use input::{Input, InputEvent, InputState};
 use keys::KeyConfig;
